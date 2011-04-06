@@ -27,7 +27,7 @@ Features:
 1. Upload the `related-links` folder to the `/wp-content/plugins/` directory.
 2. Activate the plugin through the `Plugins` menu in WordPress.
 3. Set in the link types in `Related Links` under the `Settings` menu in WordPress.
-4. Place `<?php get_related_links(); ?>` in your templates.
+4. Place `get_related_links()` in your templates.
 
 == Frequently Asked Questions ==
 
@@ -39,7 +39,7 @@ With the `get_related_links()` function. This will return an array containing th
 <ul>
 	<?php foreach ($related_links as $link): ?>
 		<li><a href="<?php echo $link["url"]; ?>"><?php echo $link["type"]; ?>: <?php echo $link["title"]; ?></a></li>
-		<?php endforeach; ?>
+	<?php endforeach; ?>
 </ul>`
 
 = How do I only show the links for a certain post_type in my theme? =
@@ -50,7 +50,7 @@ Set the `$post_type` in `get_related_links($post_type)` to `"post"`, `"page"` or
 <ul>
 	<?php foreach ($related_links as $link): ?>
 		<li><a href="<?php echo $link["url"]; ?>"><?php echo $link["type"]; ?>: <?php echo $link["title"]; ?></a></li>
-		<?php endforeach; ?>
+	<?php endforeach; ?>
 </ul>`
 
 = How do I show the related links of another post (not the current one)? =
@@ -61,7 +61,7 @@ Set the `$post_id` in `get_related_links(null, $post_id)` to the id of the post.
 <ul>
 	<?php foreach ($related_links as $link): ?>
 		<li><a href="<?php echo $link["url"]; ?>"><?php echo $link["type"]; ?>: <?php echo $link["title"]; ?></a></li>
-		<?php endforeach; ?>
+	<?php endforeach; ?>
 </ul>`
 
 == Screenshots ==
