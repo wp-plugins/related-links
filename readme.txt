@@ -22,6 +22,8 @@ Features:
 * Set which post-types should be shown in the widget
 * Simple theme integration with `get_related_links($post_type, $post_id)`
 
+Visit the [forum](http://wordpress.org/tags/related-links "Visit the Wordpress forum about this plugin.") for help or suggestions.
+
 == Installation ==
 
 1. Upload the `related-links` folder to the `/wp-content/plugins/` directory.
@@ -63,6 +65,10 @@ Set the `$post_id` in `get_related_links(null, $post_id)` to the id of the post.
 		<li><a href="<?php echo $link["url"]; ?>"><?php echo $link["type"]; ?>: <?php echo $link["title"]; ?></a></li>
 	<?php endforeach; ?>
 </ul>`
+
+= I need help, how can I ask a question? =
+
+Please visit the Wordpress [forum](http://wordpress.org/tags/related-links "Visit the Wordpress forum about this plugin.") to ask your question. You may also find there an answer to it.
 
 == Screenshots ==
 
