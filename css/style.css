@@ -1,0 +1,4 @@
+#related-links-box .tabs-panel {
+	max-height: 250px;
+	overflow: auto;
+}

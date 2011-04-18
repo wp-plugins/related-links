@@ -26,7 +26,8 @@ class Related_Links_Box
 	 */
 	public function add_styles_scripts()
 	{
-		wp_enqueue_script('related_links-scripts', WP_PLUGIN_URL . '/related-links/js/script.js', array('jquery'), '1.0');
+		wp_enqueue_style('related-links-styles', WP_PLUGIN_URL . '/related-links/css/style.css');
+		wp_enqueue_script('related-links-scripts', WP_PLUGIN_URL . '/related-links/js/script.js', array('jquery'), '1.0');
 	}
 	
 	/**
