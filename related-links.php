@@ -4,7 +4,7 @@
  * Plugin Name: Related Links
  * Plugin URI: 
  * Description: Allows to easily access links to your other posts and pages through a widget.
- * Version: 1.0
+ * Version: 1.0.1
  * Author: Insofern
  * Author URI: http://www.insofern.ch
  *
