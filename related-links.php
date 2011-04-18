@@ -2,7 +2,7 @@
 
 /*
  * Plugin Name: Related Links
- * Plugin URI: 
+ * Plugin URI: http://wordpress.org/extend/plugins/related-links/
  * Description: Allows to easily access links to your other posts and pages through a widget.
  * Version: 1.0.1
  * Author: Insofern
