@@ -45,14 +45,14 @@ With the `get_related_links()` function. This will return an array containing th
 		<?php endforeach; ?>
 </ul>`
 
-= What are the properties returned by the `get_related_links()` function?
+= What are the properties returned by the `get_related_links()` function? =
 
 the `get_related_links()` returns an array containing every related link. when you loop through this array every link consists of another array with the following keys:
 
-`id`: the id of the linked post or `null` for custom links
-`url`: the permalink of the linked post or custom link
-`title`: the title of the linked post or custom link
-`type`: the post type of the linked post or `null` for custom links
+`id` the id of the linked post or `null` for custom links
+`url` the permalink of the linked post or custom link
+`title` the title of the linked post or custom link
+`type` the post type of the linked post or `null` for custom links
 
 = How do I only show the links for a certain post_type in my theme? =
 
