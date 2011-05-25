@@ -84,7 +84,6 @@ Set the `$post_id` in `get_related_links(null, $post_id)` to the id of the post.
 == Changelog ==
 
 = 1.5 =
-A lot of changes for this version:
 * Links order can be changed with drag and drop
 * Search field to quickly find a link by name
 * External URLs can be added
