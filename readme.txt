@@ -16,10 +16,10 @@ The plugin is very useful if you plan to use a portfolio plugin ex. [Simple Port
 
 Features:
 
-* Shows a list of links in a widget on the writing page
+* Shows a list of links in a metabox on the writing page
 * Multiple links can be selected
 * Link order can be changed
-* External URLs can be added
+* Custom URLs can be added
 * Search field to quickly find a link
 * Works with custom post-types
 * Set which post-types should be shown in the widget
@@ -45,6 +45,7 @@ With the `get_related_links()` function. This will return an array containing th
 		<?php endforeach; ?>
 </ul>`
 
+
 = What are the properties returned by the `get_related_links()` function? =
 
 the `get_related_links()` returns an array containing every related link. when you loop through this array every link consists of another array with the following keys:
@@ -53,6 +54,7 @@ the `get_related_links()` returns an array containing every related link. when y
 `url` the permalink of the linked post or custom link
 `title` the title of the linked post or custom link
 `type` the post type of the linked post or `null` for custom links
+
 
 = How do I only show the links for a certain post_type in my theme? =
 
@@ -64,6 +66,7 @@ Set the `$post_type` in `get_related_links($post_type)` to `"post"`, `"page"` or
 		<li><a href="<?php echo $link["url"]; ?>"><?php echo $link["type"]; ?>: <?php echo $link["title"]; ?></a></li>
 		<?php endforeach; ?>
 </ul>`
+
 
 = How do I show the related links of another post (not the current one)? =
 
