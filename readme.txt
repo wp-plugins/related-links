@@ -79,6 +79,7 @@ A lot of changes for this version:
 * Links order can be changed with drag and drop
 * Search field to quickly find a link by name
 * External URLs can be added
+* Added a `post_id` key to the output of the get_related_links() function
 * New meta data structure but legacy support for older plugin versions is added
 * Checking if the post really exists before it is added to the output
 * Better list loading through ajax
