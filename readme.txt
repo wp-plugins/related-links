@@ -18,6 +18,9 @@ Features:
 
 * Shows a list of links in a widget on the writing page
 * Multiple links can be selected
+* Link order can be changed
+* External URLs can be added
+* Search field to quickly find a link
 * Works with custom post-types
 * Set which post-types should be shown in the widget
 * Simple theme integration with `get_related_links($post_type, $post_id)`
@@ -66,14 +69,22 @@ Set the `$post_id` in `get_related_links(null, $post_id)` to the id of the post.
 
 == Screenshots ==
 
-1. Related links widget with only one post type enabled.
-2. Related links widget with multiple post types enabled.
+1. Related links metabox on the post page.
 3. Settings page.
 
 == Changelog ==
 
+= 1.5 =
+A lot of changes for this version:
+* Links order can be changed with drag and drop
+* Search field to quickly find a link by name
+* External URLs can be added
+* New meta data structure but legacy support for older plugin versions is added
+* Checking if the post really exists before it is added to the output
+* Better list loading through ajax
+
 = 1.0.1 =
-* The widget list is now scrollable
+* The widget content list is now scrollable
 
 = 1.0 =
 Initial release

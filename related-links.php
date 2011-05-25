@@ -4,9 +4,9 @@
  * Plugin Name: Related Links
  * Plugin URI: http://wordpress.org/extend/plugins/related-links/
  * Description: Allows to easily access links to your other posts and pages through a widget.
- * Version: 1.0.1
- * Author: Insofern
- * Author URI: http://www.insofern.ch
+ * Version: 1.5
+ * Author: Iwan Negro
+ * Author URI: http://www.iwannegro.ch
  *
  * Copyright (C) 2011 Insofern
  *
@@ -34,33 +34,9 @@
 include_once('include/class-related-links-settings.php');
 include_once('include/class-related-links-box.php');
 
-/**
- * Add default settings
- */
-function related_links_add_default_settings() 
-{
-	$args = array('public' => true, 'show_ui' => true);
-	$post_types = get_post_types($args);
-	
-	foreach($post_types as $index => $value)
-	{
-		$db_type = 'type_' . $index;
-		$post_types[$db_type] = $value;
-	}
-	
-	update_option('related_links_settings', $post_types);
-}
-
-/**
- * Remove default settings
- */
-function related_links_remove_default_settings() 
-{
-	delete_option('related_links_settings');
-}
-
-register_activation_hook(__FILE__, 'related_links_add_default_settings');
-register_deactivation_hook(__FILE__, 'related_links_remove_default_settings');
+// add or remove default settings
+register_activation_hook(__FILE__, array(Related_Links_Settings, 'add_default_settings'));
+register_deactivation_hook(__FILE__, array(Related_Links_Settings, 'remove_default_settings'));
 
 // initialize objects
 $Related_Links_Settings = new Related_Links_Settings();
@@ -98,7 +74,8 @@ $Related_Links_Box = new Related_Links_Box();
  *	</ul>
  */
 
-
+if ( !function_exists( 'get_related_links' ) ) 
+{
 function get_related_links( $post_type = null, $post_id = null )
 {
 	global $post;
@@ -111,20 +88,38 @@ function get_related_links( $post_type = null, $post_id = null )
 	// Get the meta information	
 	$meta = get_post_meta($post_id, '_related_links', true);
 	$values = array();
-	
+
 	// Parse it
-	if(!empty($meta))
+	if(!empty($meta['posts']))
 	{
-		foreach($meta as $id) 
+		foreach($meta['posts'] as $id) 
 		{
-			if( $post_type == get_post_type($id) || $post_type === null || $post_type == '')
+			$is_custom = strrpos( $id, 'custom_' );
+
+			if( $is_custom !== false )
 			{
-				$values[] = array('title' => get_the_title($id), 'url' => get_permalink($id), 'type' => get_post_type($id));
+				$custom_meta = $meta['custom'][$id];
+				$custom_meta[1] = ($custom_meta[1] == '') ? null : $custom_meta[1];
+				$values[] = array('id' => null, 'title' => $custom_meta[0], 'url' => $custom_meta[1], 'type' => 'custom');
 			}
+			else
+			{
+				// check if the post exists
+				$found_post = get_post( $id );
+
+				if( !empty( $found_post ) && $found_post->post_status != 'trash' && $found_post->post_status != 'draft' )
+				{
+					if( $post_type == get_post_type($id) || $post_type === null || $post_type == '')
+					{
+						$values[] = array('id' => $id, 'title' => $found_post->post_title, 'url' => get_permalink($id), 'type' => $found_post->post_type);
+					}
+				}
+			}			
 		}
 	}
 
 	return $values;
+}
 }
 
 ?>
