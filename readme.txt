@@ -10,7 +10,7 @@ Allows to easily access links to your other posts and pages through a widget.
 
 == Description ==
 
-Related Links gives you the possibility to place in your current post a link to another post, page or any custom post-type. The plugin adds a widget to the writing page with a list of all links. The link or multiple links are selected by hand.
+Related Links gives you the possibility to place in your current post a link to another post, page or any custom post-type. The plugin adds a new metabox to the writing page with a list of all links. The link or multiple links are selected manually.
 
 The plugin is very useful if you plan to use a portfolio plugin ex. [Simple Portfolio](http://wordpress.org/extend/plugins/simple-portfolio/ "Manage your portfolio projects easily and use them everywhere you like.") http://wordpress.org/extend/plugins/simple-portfolio/ and at the same time maintainig a blog. A blog post could then be linked quite easy to a project or multiple projects. 
 
