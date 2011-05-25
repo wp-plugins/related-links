@@ -100,7 +100,7 @@ function get_related_links( $post_type = null, $post_id = null )
 			{
 				$custom_meta = $meta['custom'][$id];
 				$custom_meta[1] = ($custom_meta[1] == '') ? null : $custom_meta[1];
-				$values[] = array('id' => null, 'title' => $custom_meta[0], 'url' => $custom_meta[1], 'type' => 'custom');
+				$values[] = array('id' => null, 'title' => $custom_meta[0], 'url' => $custom_meta[1], 'type' => null);
 			}
 			else
 			{

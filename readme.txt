@@ -45,6 +45,15 @@ With the `get_related_links()` function. This will return an array containing th
 		<?php endforeach; ?>
 </ul>`
 
+= What are the properties returned by the `get_related_links()` function?
+
+the `get_related_links()` returns an array containing every related link. when you loop through this array every link consists of another array with the following keys:
+
+`id`: the id of the linked post or `null` for custom links
+`url`: the permalink of the linked post or custom link
+`title`: the title of the linked post or custom link
+`type`: the post type of the linked post or `null` for custom links
+
 = How do I only show the links for a certain post_type in my theme? =
 
 Set the `$post_type` in `get_related_links($post_type)` to `"post"`, `"page"` or any custom post-type. A simple example that show a list of links:
@@ -79,7 +88,7 @@ A lot of changes for this version:
 * Links order can be changed with drag and drop
 * Search field to quickly find a link by name
 * External URLs can be added
-* Added a `post_id` key to the output of the get_related_links() function
+* Added an `id` property to the get_related_links() function
 * New meta data structure but legacy support for older plugin versions is added
 * Checking if the post really exists before it is added to the output
 * Better list loading through ajax
