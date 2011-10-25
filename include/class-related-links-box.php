@@ -26,6 +26,8 @@ class Related_Links_Box
 	 */
 	public function init_hooks()
 	{	
+		$post_type = 'post';
+		
 		if( !isset( $_GET['post_type'] ) )
 		{
 			$post_type = get_post_type( $_GET['post'] );	
