@@ -16,32 +16,42 @@ class Related_Links_Box
 	public function Related_Links_Box()
 	{		
 		$this->settings = get_option('related_links_settings');
-
+				
 		// Set hooks
-		add_action( 'wp_ajax_load_links_list', array( $this, 'load_links_list_callback' ) );
 		add_action( 'admin_init', array( $this, 'init_hooks' ) );
-		add_action( 'save_post', array( $this, 'save_box_data' ) );
 	}
 	
 	/**
 	 * Init hooks
 	 */
 	public function init_hooks()
-	{		
-		$post_type = get_post_type( $_GET['post'] );		
+	{	
+		if( !isset( $_GET['post_type'] ) )
+		{
+			$post_type = get_post_type( $_GET['post'] );	
+		}
+		else
+		{
+			$post_type = $_GET['post_type'];	
+		}
 		
+		if( empty( $post_type ) ) 
+		{
+			$post_type = 'post';
+		}
+					
 		// show the box on all post types
 		$args = array('public' => true, 'show_ui' => true);
 		$this->show_box_post_types = get_post_types($args);
 		
-		unset($this->show_box_post_types['zirkuss_events']);
-				
 		// hooks
-		if( isset( $post_type ) && in_array( $post_type, $this->show_box_post_types ) )
+		if( in_array( $post_type, $this->show_box_post_types ) && !isset( $_GET['taxonomy'] ))
 		{
+			add_action( 'wp_ajax_load_links_list', array( $this, 'load_links_list_callback' ) );
 			add_action( 'admin_print_styles', array( $this, 'add_styles' ) );
 			add_action( 'admin_print_scripts', array( $this, 'add_scripts' ) );
 			add_action( 'add_meta_boxes', array( $this, 'add_box' ) );
+			add_action( 'save_post', array( $this, 'save_box_data' ) );
 		}
 	}
 	

@@ -3,7 +3,7 @@ Contributors: chabis
 Donate link: http://www.insofern.ch/
 Tags: related, deep, internal, link, post, page, selection
 Requires at least: 3.0
-Tested up to: 3.1
+Tested up to: 3.2.1
 Stable tag: trunk
 
 Allows to easily access links to your other posts and pages through a widget.
@@ -86,6 +86,8 @@ Set the `$post_id` in `get_related_links(null, $post_id)` to the id of the post.
 
 == Changelog ==
 
+= 1.5.1 =
+* Fixed a bug where the plugin was also loaded on the taxonomy admin pages
 = 1.5 =
 * Links order can be changed with drag and drop
 * Search field to quickly find a link by name
