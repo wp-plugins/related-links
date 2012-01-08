@@ -30,7 +30,10 @@ class Related_Links_Box
 		
 		if( !isset( $_GET['post_type'] ) )
 		{
-			$post_type = get_post_type( $_GET['post'] );	
+			if( isset( $_GET['post'] ) ) 
+			{
+				$post_type = get_post_type( $_GET['post'] );
+			}
 		}
 		else
 		{
@@ -198,7 +201,7 @@ class Related_Links_Box
 	public function load_links_list( $posts_per_page = -1 )
 	{
 		global $post, $wpdb;
-
+		
 		// save offset
 		if($posts_per_page > 0)
 		{
@@ -226,12 +229,12 @@ class Related_Links_Box
 			
 		// start the output
 		$query_posts = $wpdb->get_results( $sql );
-		
-		// Get the meta information	
-		$meta = get_post_meta($post->ID, '_related_links', true);
-
+	
 		if( !empty( $query_posts ) )
 		{
+			// Get the meta information
+			$meta = get_post_meta($post->ID, '_related_links', true);
+
 			// add the items
 			foreach( $query_posts as $query_post )
 			{

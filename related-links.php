@@ -4,11 +4,11 @@
  * Plugin Name: Related Links
  * Plugin URI: http://wordpress.org/extend/plugins/related-links/
  * Description: Allows to easily access links to your other posts and pages through a widget.
- * Version: 1.5.1
+ * Version: 1.5.2
  * Author: Iwan Negro
  * Author URI: http://www.iwannegro.ch
  *
- * Copyright (C) 2011 Insofern
+ * Copyright (C) 2011 Iwan Negro
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,13 +34,13 @@
 include_once('include/class-related-links-settings.php');
 include_once('include/class-related-links-box.php');
 
-// add or remove default settings
-register_activation_hook(__FILE__, array(Related_Links_Settings, 'add_default_settings'));
-register_deactivation_hook(__FILE__, array(Related_Links_Settings, 'remove_default_settings'));
-
 // initialize objects
 $Related_Links_Settings = new Related_Links_Settings();
 $Related_Links_Box = new Related_Links_Box();
+
+// add or remove default settings
+register_activation_hook(__FILE__, array($Related_Links_Settings, 'add_default_settings'));
+register_deactivation_hook(__FILE__, array($Related_Links_Settings, 'remove_default_settings'));
 
 
 // ------------------------------------------

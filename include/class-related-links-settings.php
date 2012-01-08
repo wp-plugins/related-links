@@ -15,7 +15,7 @@ class Related_Links_Settings
 	/**
 	 * Add default settings
 	 */
-	static function add_default_settings() 
+	public function add_default_settings() 
 	{
 		$args = array('public' => true, 'show_ui' => true);
 		$post_types = get_post_types($args);
@@ -32,7 +32,7 @@ class Related_Links_Settings
 	/**
 	 * Remove default settings
 	 */
-	static function remove_default_settings() 
+	public function remove_default_settings() 
 	{
 		delete_option('related_links_settings');
 	}
@@ -84,19 +84,36 @@ class Related_Links_Settings
 	 */
 	public function create_page_content() 
 	{
-		?>
-		<div class="wrap">
-			<div class="icon32" id="icon-options-general"><br></div>
-				<h2>Related Links Settings</h2>
-				<form action="options.php" method="post">
+		if (!current_user_can('manage_options'))
+		{
+			wp_die( __('You do not have sufficient permissions to access this page.') );
+		}
+		
+		$hidden_submit = 'related_links_submit_hidden';
+		
+		// See if the user has posted us some information
+		if( isset($_POST[$hidden_submit]) && $_POST[$hidden_submit] == 'submit' )
+		{
+			// Save the posted value in the database
+			update_option('related_links_settings', $_POST['related_links_settings'] );
+			
+			// Put an settings updated message on the screen
+			?><div class="updated"><p><strong><?php _e('Settings saved.'); ?></strong></p></div><?php
+		}
+		
+		// Now display the settings editing screen
+		?><div class="wrap">
+			<?php screen_icon('options-general'); ?>
+			<h2><?php _e('Related Links Settings', 'related_links'); ?></h2>
+			<form action="" method="post">
+				<input type="hidden" name="<?php echo $hidden_submit; ?>" value="submit">
 				<?php settings_fields('related_links_settings'); ?>
 				<?php do_settings_sections(__FILE__); ?>
 				<p class="submit">
 					<input name="Submit" type="submit" class="button-primary" value="<?php esc_attr_e('Save Changes'); ?>" />
 				</p>
 			</form>
-		</div>
-		<?php
+		</div><?php
 	}
 }
 }

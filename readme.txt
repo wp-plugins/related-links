@@ -86,6 +86,8 @@ Set the `$post_id` in `get_related_links(null, $post_id)` to the id of the post.
 
 == Changelog ==
 
+= 1.5.2 =
+* Updated the way how settings are saved to be compatible with future WordPress versions
 = 1.5.1 =
 * Fixed a bug where the plugin was also loaded on the taxonomy admin pages
 = 1.5 =
