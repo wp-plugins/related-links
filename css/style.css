@@ -21,7 +21,6 @@
 	padding-bottom: 1px;
 	padding-right: 8px;
 	padding-top: 1px;
-	font-size: 11px;
 	margin: 0;
 	display: block;
 	overflow: hidden;
@@ -80,6 +79,7 @@
 #related-links-list {
 	padding-top: 5px;
 	padding-bottom: 5px;
+	margin: 0px;
 }
 
 #related-links-list li.loading {
@@ -131,14 +131,18 @@
 
 #related-links-selected ul {
 	list-style-type: none;
+	margin: 0px;
 }
 
 #related-links-selected .related-links-selected {
 	padding-left: 10px;
-	padding-bottom: 5px;
+	padding-bottom: 7px;
 	padding-right: 10px;
-	padding-top: 5px;
+	padding-top: 7px;
 	border: 1px solid #E6E6E6;
+	line-height: normal;
+	width: auto;
+	height: auto;
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
 	-o-border-radius: 3px;
@@ -152,7 +156,6 @@
 	text-shadow: white 0px 1px 0px;
 	word-wrap: break-word;
 	margin-bottom: 6px;
-	font-size: 11px;
 	cursor: pointer;
 }
 
