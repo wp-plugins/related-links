@@ -6,7 +6,7 @@ Requires at least: 3.0
 Tested up to: 3.2.1
 Stable tag: trunk
 
-Allows to easily access links to your other posts and pages through a widget.
+Allows to easily access links to your other posts and pages through a meta box on the writing page.
 
 == Description ==
 
@@ -22,7 +22,7 @@ Features:
 * Custom URLs can be added
 * Search field to quickly find a link
 * Works with custom post-types
-* Set which post-types should be shown in the widget
+* Set which post-types should be shown in the meta box
 * Simple theme integration with `get_related_links($post_type, $post_id)`
 
 == Installation ==
@@ -86,6 +86,8 @@ Set the `$post_id` in `get_related_links(null, $post_id)` to the id of the post.
 
 == Changelog ==
 
+= 1.5.4 =
+* Fixed a bug where get_related_links() always returned custom links when the post_type parameter was set
 = 1.5.3 =
 * Updated CSS for WordPress 3.3 
 = 1.5.2 =
@@ -102,7 +104,7 @@ Set the `$post_id` in `get_related_links(null, $post_id)` to the id of the post.
 * Better list loading through ajax
 
 = 1.0.1 =
-* The widget content list is now scrollable
+* The meta box content list is now scrollable
 
 = 1.0 =
 Initial release

@@ -4,7 +4,7 @@
  * Plugin Name: Related Links
  * Plugin URI: http://wordpress.org/extend/plugins/related-links/
  * Description: Allows to easily access links to your other posts and pages through a widget.
- * Version: 1.5.3
+ * Version: 1.5.4
  * Author: Iwan Negro
  * Author URI: http://www.iwannegro.ch
  *
@@ -80,41 +80,48 @@ function get_related_links( $post_type = null, $post_id = null )
 {
 	global $post;
 	
-	if ($post_id === null || $post_id == '') 
+	if ( empty( $post_id ) ) 
 	{
 		$post_id = $post->ID;
 	}
 	
 	// Get the meta information	
-	$meta = get_post_meta($post_id, '_related_links', true);
+	$meta = get_post_meta( $post_id, '_related_links', true );
 	$values = array();
 
 	// Parse it
-	if(!empty($meta['posts']))
+	if( !empty( $meta['posts'] ) )
 	{
-		foreach($meta['posts'] as $id) 
-		{
+		foreach( $meta['posts'] as $id ) 
+		{	
 			$is_custom = strrpos( $id, 'custom_' );
-
+			
 			if( $is_custom !== false )
 			{
+				// Read the custom meta data
 				$custom_meta = $meta['custom'][$id];
 				$custom_meta[1] = ($custom_meta[1] == '') ? null : $custom_meta[1];
-				$values[] = array('id' => null, 'title' => $custom_meta[0], 'url' => $custom_meta[1], 'type' => null);
+				
+				// Push custom values
+				if( $post_type == 'custom' || empty( $post_type ) )
+				{		
+					$values[] = array('id' => null, 'title' => $custom_meta[0], 'url' => $custom_meta[1], 'type' => null);
+				}
 			}
 			else
 			{
-				// check if the post exists
+				// Check if the post exists
 				$found_post = get_post( $id );
-
+				
 				if( !empty( $found_post ) && $found_post->post_status != 'trash' && $found_post->post_status != 'draft' )
 				{
-					if( $post_type == get_post_type($id) || $post_type === null || $post_type == '')
+					// Push posts values
+					if( $post_type == get_post_type($id) || empty( $post_type ) )
 					{
 						$values[] = array('id' => $id, 'title' => $found_post->post_title, 'url' => get_permalink($id), 'type' => $found_post->post_type);
 					}
 				}
-			}			
+			}		
 		}
 	}
 
