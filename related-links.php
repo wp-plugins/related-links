@@ -6,7 +6,7 @@
  * Description: Allows to easily access links to your other posts and pages through a widget.
  * Version: 1.5.4
  * Author: Iwan Negro
- * Author URI: http://www.iwannegro.ch
+ * Author URI: http://wordpress.org/extend/plugins/related-links/
  *
  * Copyright (C) 2011 Iwan Negro
  *

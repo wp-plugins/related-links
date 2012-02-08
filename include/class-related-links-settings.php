@@ -66,7 +66,7 @@ class Related_Links_Settings
 			$post_type_object = get_post_type_object( $post_type );
 			
 			?>
-			<label><input name="related_links_settings[types][<?php echo $post_type; ?>]" value="<?php echo $post_type; ?>" type="checkbox" <?php if($options['types'] && $options['types'][$post_type]) { ?> checked="checked"<?php } ?> /> <?php echo $post_type_object->label; ?></label><br />
+			<label><input name="related_links_settings[types][<?php echo $post_type; ?>]" value="<?php echo $post_type; ?>" type="checkbox" <?php if(isset($options['types']) && isset($options['types'][$post_type])) { ?> checked="checked"<?php } ?> /> <?php echo $post_type_object->label; ?></label><br />
 			<?php
 		}
 	}

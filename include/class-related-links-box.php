@@ -168,13 +168,7 @@ class Related_Links_Box
 			<div id="related-links-content">
 				<ul id="related-links-list" class="related-links-list form-no-clear">
 					<li class="loading"><?php _e('Loading list...', 'related_links'); ?></li>
-			<?php
-			
-			// create the links
-			// new: loaded with ajax
-			//$this->load_links_list();
-			
-			?>
+					<?php // create the links (loaded with ajax) ?>
 				</ul>
 			</div>
 			<?php
@@ -200,8 +194,8 @@ class Related_Links_Box
 	 */
 	public function load_links_list( $posts_per_page = -1 )
 	{
-		global $post, $wpdb;
-		
+		global $wpdb;
+				
 		// save offset
 		if($posts_per_page > 0)
 		{
@@ -232,8 +226,11 @@ class Related_Links_Box
 	
 		if( !empty( $query_posts ) )
 		{
-			// Get the meta information
-			$meta = get_post_meta($post->ID, '_related_links', true);
+			// Get the post id from the ajax call
+			$post_id = intval($_POST['post_id']);
+
+			// Get the meta information to mark the links
+			$meta = get_post_meta($post_id, '_related_links', true);
 
 			// add the items
 			foreach( $query_posts as $query_post )

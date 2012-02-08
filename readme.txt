@@ -1,24 +1,24 @@
 === Related Links ===
 Contributors: chabis
-Donate link: http://www.insofern.ch/
+Donate link: http://wordpress.org/extend/plugins/related-links/
 Tags: related, deep, internal, link, post, page, selection
 Requires at least: 3.0
 Tested up to: 3.2.1
 Stable tag: trunk
 
-Allows to easily access links to your other posts and pages through a meta box on the writing page.
+Manually link to existing content or a custom url through a meta box on the writing page.
 
 == Description ==
 
-Related Links gives you the possibility to place in your current post a link to another post, page or any custom post-type. The plugin adds a new metabox to the writing page with a list of all links. The link or multiple links are selected manually.
+Related Links gives you the possibility to add to your current post links to other posts, pages or any custom posttypes. The plugin adds a new metabox to the writing page with a list of all links. The link or multiple links are selected manually.
 
 The plugin is very useful if you plan to use a portfolio plugin ex. [Simple Portfolio](http://wordpress.org/extend/plugins/simple-portfolio/ "Manage your portfolio projects easily and use them everywhere you like.") http://wordpress.org/extend/plugins/simple-portfolio/ and at the same time maintainig a blog. A blog post could then be linked quite easy to a project or multiple projects. 
 
 Features:
 
-* Shows a list of links in a metabox on the writing page
+* Shows a list of all available content in a metabox on the writing page
 * Multiple links can be selected
-* Link order can be changed
+* Link order can be changed through drag and drop
 * Custom URLs can be added
 * Search field to quickly find a link
 * Works with custom post-types
@@ -86,6 +86,8 @@ Set the `$post_id` in `get_related_links(null, $post_id)` to the id of the post.
 
 == Changelog ==
 
+= 1.5.5 =
+* Fixed the marking of already selected links in the list (thanks robert_k for the fix)
 = 1.5.4 =
 * Fixed a bug where get_related_links() always returned custom links when the post_type parameter was set
 = 1.5.3 =

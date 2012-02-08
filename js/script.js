@@ -45,14 +45,34 @@ jQuery(document).ready(function($) {
 		var url = jQuery("#related-links-custom-url").val();
 		var type = "Custom";
 
-		if(title == jQuery("#related-links-custom-label").attr("title")) {
-			title = "";
+		if(url == jQuery("#related-links-custom-url").attr("title")) {
+			url = "";
+			
+			var bColor = jQuery("#related-links-custom-url").css("borderTopColor");
+			var bgColor = jQuery("#related-links-custom-url").css("backgroundColor");
+			var tColor = jQuery("#related-links-custom-url").css("color");
+
+			jQuery("#related-links-custom-url").animate({
+				borderTopColor: "#A82F00", 
+				borderLeftColor: "#A82F00", 
+				borderRightColor: "#A82F00", 
+				borderBottomColor: "#A82F00", 
+				backgroundColor: "#F8ECE8",
+				color: "#A82F00"
+			}, 1).delay(300).animate({
+				borderTopColor: bColor, 
+				borderLeftColor: bColor, 
+				borderRightColor: bColor, 
+				borderBottomColor: bColor, 
+				backgroundColor: bgColor,
+				color: tColor
+			}, 500);
 			
 			return false;
 		}
 		
-		if(url == jQuery("#related-links-custom-url").attr("title")) {
-			url = "";
+		if(title == jQuery("#related-links-custom-label").attr("title")) {
+			title = url;
 		}
 		
 		jQuery("#related-links-selected ul").prepend('<li class="related-links-selected menu-item-handle" id="related-links-selected-' + id + '"><input type="hidden" name="related_links[posts][]" value="' + id + '" /><input type="hidden" name="related_links[custom][' + id + '][]" value="' + title + '" /><input type="hidden" name="related_links[custom][' + id + '][]" value="' + url + '"/><span class="selected-title">' + title + '</span><span class="selected-right"><span class="selected-type">' + type + '</span><a href="#" class="selected-delete">Delete</a></span></li>');
@@ -116,7 +136,8 @@ jQuery(document).ready(function($) {
 	
 	// load the posts links list in the metabox with ajax	
 	var data = {
-		action: "load_links_list"
+		action: "load_links_list",
+		post_id: jQuery('#post_ID').val()
 	};
 	
 	jQuery.post(ajaxurl, data, function(response) {
