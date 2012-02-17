@@ -6,9 +6,9 @@ class Related_Links_Box
 	/**
 	 * Class properties
 	 */
-	private $show_box_post_types;
+	private $post_type;
 	private $settings;
-	private $offset = 0;
+	private $offset;
 	
 	/**
 	 * Constructor
@@ -16,7 +16,8 @@ class Related_Links_Box
 	public function Related_Links_Box()
 	{		
 		$this->settings = get_option('related_links_settings');
-				
+		$this->offset = 0;
+
 		// Set hooks
 		add_action( 'admin_init', array( $this, 'init_hooks' ) );
 	}
@@ -26,31 +27,40 @@ class Related_Links_Box
 	 */
 	public function init_hooks()
 	{	
-		$post_type = 'post';
-		
-		if( !isset( $_GET['post_type'] ) )
+		global $wpdb;
+	
+		// read the post type
+		if( isset( $_GET['post_type'] ) ) 
 		{
-			if( isset( $_GET['post'] ) ) 
+			$this->post_type = $_GET['post_type'];
+		} 
+		else if( isset( $_POST['post_type'] ) ) 
+		{
+			$this->post_type = $_POST['post_type'];
+		}
+		else 
+		{
+			// post type can't be read directly. try to use the post id.
+			if( isset( $_GET['post'] ) )
 			{
-				$post_type = get_post_type( $_GET['post'] );
+				$this->post_type = get_post_type( $_GET['post'] );
 			}
-		}
-		else
-		{
-			$post_type = $_GET['post_type'];	
-		}
-		
-		if( empty( $post_type ) ) 
-		{
-			$post_type = 'post';
-		}
-					
+			else if( isset( $_POST['post_id'] ) )
+			{
+				$this->post_type = get_post_type( $_POST['post_id'] );
+			}
+			else
+			{
+				$this->post_type = null;
+			}
+		}	
+						
 		// show the box on all post types
 		$args = array('public' => true, 'show_ui' => true);
-		$this->show_box_post_types = get_post_types($args);
-		
+		$public_post_types = get_post_types($args);
+
 		// hooks
-		if( in_array( $post_type, $this->show_box_post_types ) && !isset( $_GET['taxonomy'] ))
+		if( isset( $this->post_type ) && isset( $this->settings ) &&  in_array( $this->post_type, $public_post_types ) ) 
 		{
 			add_action( 'wp_ajax_load_links_list', array( $this, 'load_links_list_callback' ) );
 			add_action( 'admin_print_styles', array( $this, 'add_styles' ) );
@@ -195,7 +205,7 @@ class Related_Links_Box
 	public function load_links_list( $posts_per_page = -1 )
 	{
 		global $wpdb;
-				
+
 		// save offset
 		if($posts_per_page > 0)
 		{
@@ -261,7 +271,7 @@ class Related_Links_Box
 			die('<li>Loading error occured</li>');
 		}
 		*/
-		
+
 		// Check permissions		
 	    if ( current_user_can( 'edit_posts' ) ) 
 	    {
@@ -275,11 +285,12 @@ class Related_Links_Box
 	 * Save the box content
 	 */
 	public function save_box_data( $post_id )
-	{		
+	{
 		// verify this came from the our screen and with 
 		// proper authorization, because save_post can be 
 		// triggered at other times
-		if ( !wp_verify_nonce( $_POST['related_links_nonce'], plugin_basename( __FILE__ ) )) {
+		if ( empty($_POST['related_links_nonce']) || !wp_verify_nonce( $_POST['related_links_nonce'], plugin_basename( __FILE__ ) )) 
+		{
 			return $post_id;
 		}
   
@@ -308,16 +319,15 @@ class Related_Links_Box
 		
 		// OK, we're authenticated: Now we need to find and 
 		// save the data.
-		$data = $_POST['related_links'];		
 		
 		// save, update or delete the custom field of the post
-		if(empty($data))
+		if(empty($_POST['related_links']))
 		{
 			delete_post_meta( $post_id, '_related_links' );
 		}
 		else
 		{
-			add_post_meta( $post_id, '_related_links', $data, true ) or update_post_meta( $post_id, '_related_links', $data );
+			add_post_meta( $post_id, '_related_links', $_POST['related_links'], true ) or update_post_meta( $post_id, '_related_links', $_POST['related_links'] );
   		}
   	}
 

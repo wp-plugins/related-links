@@ -156,7 +156,7 @@
 	text-shadow: white 0px 1px 0px;
 	word-wrap: break-word;
 	margin-bottom: 6px;
-	cursor: pointer;
+	cursor: move;
 }
 
 #related-links-selected .selected-right {

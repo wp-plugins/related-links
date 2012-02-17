@@ -86,6 +86,8 @@ Set the `$post_id` in `get_related_links(null, $post_id)` to the id of the post.
 
 == Changelog ==
 
+= 1.5.6 =
+* Fixed a problem where empty post data could lead to a php error.
 = 1.5.5 =
 * Fixed the marking of already selected links in the list (thanks robert_k for the fix)
 = 1.5.4 =
