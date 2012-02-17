@@ -30,44 +30,43 @@ class Related_Links_Box
 		global $wpdb;
 	
 		// read the post type
-		if( isset( $_GET['post_type'] ) ) 
+		if( isset( $_GET['post'] ) )
 		{
-			$this->post_type = $_GET['post_type'];
-		} 
-		else if( isset( $_POST['post_type'] ) ) 
-		{
-			$this->post_type = $_POST['post_type'];
+			// from the edit screen
+			$this->post_type = get_post_type( $_GET['post'] );
 		}
-		else 
+		else if( isset( $_POST['post_id'] ) )
 		{
-			// post type can't be read directly. try to use the post id.
-			if( isset( $_GET['post'] ) )
-			{
-				$this->post_type = get_post_type( $_GET['post'] );
-			}
-			else if( isset( $_POST['post_id'] ) )
-			{
-				$this->post_type = get_post_type( $_POST['post_id'] );
-			}
-			else
-			{
-				$this->post_type = null;
-			}
-		}	
-						
-		// show the box on all post types
-		$args = array('public' => true, 'show_ui' => true);
-		$public_post_types = get_post_types($args);
+			// from the ajax request
+			$this->post_type = get_post_type( $_POST['post_id'] );
+		}
+		else if( isset( $_POST['post_ID'] ) )
+		{
+			// from the save hook
+			$this->post_type = get_post_type( $_POST['post_ID'] );
+		}
+		else
+		{
+			$this->post_type = null;
+		}
+		
+		// load the hooks
+		add_action( 'wp_ajax_load_links_list', array( $this, 'load_links_list_callback' ) );
+		add_action( 'admin_print_styles-post.php', array( $this, 'add_styles' ) );
+		add_action( 'admin_print_styles-post-new.php', array( $this, 'add_styles' ) );
+		add_action( 'admin_print_scripts-post.php', array( $this, 'add_scripts' ) );
+		add_action( 'admin_print_scripts-post-new.php', array( $this, 'add_scripts' ) );
+		add_action( 'save_post', array( $this, 'save_box_data' ) );
 
-		// hooks
-		if( isset( $this->post_type ) && isset( $this->settings ) &&  in_array( $this->post_type, $public_post_types ) ) 
-		{
-			add_action( 'wp_ajax_load_links_list', array( $this, 'load_links_list_callback' ) );
-			add_action( 'admin_print_styles', array( $this, 'add_styles' ) );
-			add_action( 'admin_print_scripts', array( $this, 'add_scripts' ) );
-			add_action( 'add_meta_boxes', array( $this, 'add_box' ) );
-			add_action( 'save_post', array( $this, 'save_box_data' ) );
-		}
+		// show the box on all public post types
+		/*
+		$args = array(
+			'public' => true, 
+			'show_ui' => true
+		);
+		$public_post_types = get_post_types($args);
+		*/
+		add_action( 'add_meta_boxes', array( $this, 'add_box' ) );
 	}
 	
 	/**
@@ -104,7 +103,7 @@ class Related_Links_Box
 	public function create_box_content()
 	{
 		global $post;
-		
+
 		// stop the output when no type is enabled		
 		if (empty($this->settings['types']))
 		{

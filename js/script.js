@@ -32,7 +32,7 @@ jQuery(document).ready(function($) {
 		jQuery(this).addClass("selected");
 				
 		if (jQuery("#related-links-selected-" + id).length == 0) {
-			jQuery("#related-links-selected ul").prepend('<li class="related-links-selected menu-item-handle" id="related-links-selected-' + id + '"><input type="hidden" name="related_links[posts][]" value="' + id + '" /><span class="selected-title">' + title + '</span><span class="selected-right"><span class="selected-type">' + type + '</span><a href="#" class="selected-delete">Delete</a></span></li>');
+			jQuery("#related-links-selected ul").append('<li class="related-links-selected menu-item-handle" id="related-links-selected-' + id + '"><input type="hidden" name="related_links[posts][]" value="' + id + '" /><span class="selected-title">' + title + '</span><span class="selected-right"><span class="selected-type">' + type + '</span><a href="#" class="selected-delete">Delete</a></span></li>');
 		}
 		
 		return false;
@@ -75,7 +75,7 @@ jQuery(document).ready(function($) {
 			title = url;
 		}
 		
-		jQuery("#related-links-selected ul").prepend('<li class="related-links-selected menu-item-handle" id="related-links-selected-' + id + '"><input type="hidden" name="related_links[posts][]" value="' + id + '" /><input type="hidden" name="related_links[custom][' + id + '][]" value="' + title + '" /><input type="hidden" name="related_links[custom][' + id + '][]" value="' + url + '"/><span class="selected-title">' + title + '</span><span class="selected-right"><span class="selected-type">' + type + '</span><a href="#" class="selected-delete">Delete</a></span></li>');
+		jQuery("#related-links-selected ul").append('<li class="related-links-selected menu-item-handle" id="related-links-selected-' + id + '"><input type="hidden" name="related_links[posts][]" value="' + id + '" /><input type="hidden" name="related_links[custom][' + id + '][]" value="' + title + '" /><input type="hidden" name="related_links[custom][' + id + '][]" value="' + url + '"/><span class="selected-title">' + title + '</span><span class="selected-right"><span class="selected-type">' + type + '</span><a href="#" class="selected-delete">Delete</a></span></li>');
 		jQuery("#related-links-custom-label").val("").focus();
 		jQuery("#related-links-custom-url").val("").blur();
 		
