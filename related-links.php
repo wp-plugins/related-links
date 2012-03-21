@@ -4,9 +4,10 @@
  * Plugin Name: Related Links
  * Plugin URI: http://wordpress.org/extend/plugins/related-links/
  * Description: Allows to easily access links to your other posts and pages through a widget.
- * Version: 1.5.6
+ * Version: 1.5.7
  * Author: Triggvy Gunderson
  * Author URI: http://wordpress.org/extend/plugins/related-links/
+ * License: GPLv3
  *
  * Copyright (C) 2012 Triggvy Gunderson
  *
@@ -54,26 +55,7 @@ register_deactivation_hook(__FILE__, array($Related_Links_Settings, 'remove_defa
  * @param $post_id int (optional) The post id for which you want to retreive the links, if null it will pull from global $post.
  * @param $post_type string (optional) Filter by all registered post types, if null it will pull all post types.
  * @return array The array is keyed.
- *
- * Example retrieve links from all post types:
- *
- * 	<?php $related_links = get_related_links(); ?>
- *	<ul>
- * 		<?php foreach ($related_links as $link): ?>
- *		<li><a href="<?php echo $link["url"]; ?>"><?php echo $link["type"]; ?>: <?php echo $link["title"]; ?></a></li>
- *		<?php endforeach; ?>
- *	</ul>
- *
- * Example retrieve only links from "page" post type:
- *
- * 	<?php $related_links = get_related_links( "page" ); ?>
- *	<ul>
- * 		<?php foreach ($related_links as $link): ?>
- *		<li><a href="<?php echo $link["url"]; ?>"><?php echo $link["type"]; ?>: <?php echo $link["title"]; ?></a></li>
- *		<?php endforeach; ?>
- *	</ul>
  */
-
 if ( !function_exists( 'get_related_links' ) ) 
 {
 function get_related_links( $post_type = null, $post_id = null )
@@ -126,6 +108,23 @@ function get_related_links( $post_type = null, $post_id = null )
 	}
 
 	return $values;
+}
+}
+
+/**
+ * Get a unordered list of related links for the current post.
+ */
+if ( !function_exists( 'related_links' ) ) 
+{
+function related_links()
+{
+	$related_links = get_related_links(); ?>
+	<ul>
+	<?php foreach ($related_links as $link): ?>
+		<li><a href="<?php echo $link["url"]; ?>"><?php echo $link["title"]; ?></a></li>
+	<?php endforeach; ?>
+	</ul>
+	<?php
 }
 }
 

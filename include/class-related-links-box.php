@@ -13,7 +13,7 @@ class Related_Links_Box
 	/**
 	 * Constructor
 	 */
-	public function Related_Links_Box()
+	public function __construct()
 	{		
 		$this->settings = get_option('related_links_settings');
 		$this->offset = 0;
@@ -221,10 +221,10 @@ class Related_Links_Box
 		$sql_post_types = "'" . implode("', '", $this->settings['types']) . "'";
 
 		$sql = "
-			SELECT post_title, ID, post_type
+			SELECT post_title, ID, post_type, post_mime_type
 			FROM {$wpdb->posts}
 			WHERE post_status
-			IN ('publish', 'future')
+			IN ('publish', 'future', 'inherit')
 			AND	post_type 
 			IN ($sql_post_types)
 			ORDER BY post_type, post_title ASC 

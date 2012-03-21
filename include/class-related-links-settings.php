@@ -6,8 +6,8 @@ class Related_Links_Settings
 	/**
 	 * Constructor
 	 */
-	public function Related_Links_Settings()
-	{	
+	public function __construct()
+	{		
 		add_action('admin_init', array($this, 'init_page'));
 		add_action('admin_menu', array($this, 'add_page'));
 	}
@@ -17,8 +17,7 @@ class Related_Links_Settings
 	 */
 	public function add_default_settings() 
 	{
-		$args = array('public' => true, 'show_ui' => true);
-		$post_types = get_post_types($args);
+		$post_types = $this->get_linkable_post_types();
 		$option = array('types' => array());
 		
 		foreach($post_types as $index => $value)
@@ -43,7 +42,7 @@ class Related_Links_Settings
 	public function init_page()
 	{
 		register_setting('related_links_settings', 'related_links_settings');
-		add_settings_section('post_types_section', __('Types', 'related_links'), array($this, 'create_post_types_section'), __FILE__);
+		add_settings_section('post_types_section', __('Metabox options', 'related_links'), array($this, 'create_post_types_section'), __FILE__);
 		add_settings_field('post_types_checkboxes', __('Show related links types:', 'related_links'), array($this, 'create_post_types_checkboxes'), __FILE__, 'post_types_section');
 	}
 	
@@ -57,8 +56,7 @@ class Related_Links_Settings
 	public function create_post_types_checkboxes() 
 	{
 		$options = get_option('related_links_settings');
-		$args = array('public' => true, 'show_ui' => true);
-		$post_types = get_post_types($args);
+		$post_types = $this->get_linkable_post_types();
 		
 		// add all link types that have a gui
 		foreach($post_types as $post_type)
@@ -114,6 +112,16 @@ class Related_Links_Settings
 				</p>
 			</form>
 		</div><?php
+	}
+	
+	/**
+	 * Get all posty types that can be enabled in the metabox
+	 */
+	public function get_linkable_post_types() 
+	{
+		$args = array('public' => true, 'publicly_queryable' => true, 'show_ui' => true);
+		
+		return get_post_types($args, 'names', 'or');		
 	}
 }
 }
