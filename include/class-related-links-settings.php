@@ -42,14 +42,14 @@ class Related_Links_Settings
 	public function init_page()
 	{
 		register_setting('related_links_settings', 'related_links_settings');
-		add_settings_section('post_types_section', __('Metabox options', 'related_links'), array($this, 'create_post_types_section'), __FILE__);
-		add_settings_field('post_types_checkboxes', __('Show related links types:', 'related_links'), array($this, 'create_post_types_checkboxes'), __FILE__, 'post_types_section');
+		add_settings_section('post_types_section', __('Meta-Box options', 'related_links'), array($this, 'create_post_types_section'), __FILE__);
+		add_settings_field('post_types_checkboxes', __('Show this type of content in the list:', 'related_links'), array($this, 'create_post_types_checkboxes'), __FILE__, 'post_types_section');
 	}
 	
 	public function create_post_types_section() 
 	{
 		?>
-		<p><?php _e( 'Select which types of related links you want to show in the "Related Links" box located on the writing pages', 'related_links' ); ?>.</p>
+		<p><?php _e( 'The meta-box is visible on every writing page. It shows a list of content to which you can link to.', 'related_links' ); ?></p>
 		<?php
 	}
 

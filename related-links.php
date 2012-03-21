@@ -121,7 +121,7 @@ function related_links()
 	$related_links = get_related_links(); ?>
 	<ul>
 	<?php foreach ($related_links as $link): ?>
-		<li><a href="<?php echo $link["url"]; ?>"><?php echo $link["title"]; ?></a></li>
+		<li><a href="<?php echo $link['url']; ?>"><?php echo $link['title']; ?></a></li>
 	<?php endforeach; ?>
 	</ul>
 	<?php
