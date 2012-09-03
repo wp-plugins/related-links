@@ -1,28 +1,5 @@
 jQuery(document).ready(function($) {
 		
-	// add filtering to the search field
-	jQuery("#related-links-searchfield").change(function() {
-		var filter = jQuery(this).val();
-		if(filter) {
-			// this finds all links in a list that contain the input,
-			// and hide the ones not containing the input while showing the ones that do
-			jQuery("#related-links-list").find("a:not(:Contains(" + filter + "))").parent().hide();
-			jQuery("#related-links-list").find("a:Contains(" + filter + ")").parent().show();
-		} else {
-			jQuery("#related-links-list").find("li").show();
-		}
-		
-		return false;
-	}).keyup(function() {
-		// fire the above change event after every letter
-		jQuery(this).change();
-	});
-		
-	// custom css expression for a case-insensitive contains()
-	jQuery.expr[':'].Contains = function(a,i,m){
-		return (a.textContent || a.innerText || "").toUpperCase().indexOf(m[3].toUpperCase())>=0;
-	};
-	
 	// add a link to the list
 	jQuery("#related-links-list a").live("click", function(event) {
 		var id = jQuery(this).attr("href").substr(1);
@@ -114,34 +91,108 @@ jQuery(document).ready(function($) {
 	// enable sorting
 	jQuery("#related-links-selected ul").sortable();
 	
-	// placeholder text
-	var name = 'related-links-textfield-placeholder';
-
-	$('.' + name).each( function(){
-		var $t = $(this), title = $t.attr('title'), val = $t.val();
+	/*
+	// placeholder text	
+	var name = "related-links-textfield-placeholder";
+	$("." + name).each(function() {
+		var $t = $(this), title = $t.attr("title"), val = $t.val();
 		$t.data( name, title );
 
-		if( '' == val ) $t.val( title );
-		else if ( title == val ) return;
-		else $t.removeClass( name );
+		if("" == val ) {
+			$t.val( title );
+		} else if ( title == val ) {
+			return;
+		} else {
+			$t.removeClass( name );
+		}
 	}).focus( function(){
 		var $t = $(this);
-		if( $t.val() == $t.data(name) )
-			$t.val('').removeClass( name );
+		if( $t.val() == $t.data(name) ) {
+			$t.val("").removeClass( name );
+		}
 	}).blur( function(){
 		var $t = $(this);
-		if( '' == $t.val() )
+		if("" == $t.val() ) {
 			$t.addClass( name ).val( $t.data(name) );
-	});	
-	
-	// load the posts links list in the metabox with ajax	
-	var data = {
-		action: "load_links_list",
-		post_id: jQuery('#post_ID').val()
-	};
-	
-	jQuery.post(ajaxurl, data, function(response) {
-		jQuery("#related-links-list").empty();
-		jQuery("#related-links-list").append(response);
+		}
 	});
+	*/
+		
+	// list content display
+	var numPosts = 20;
+	var offsetCounter = 0;
+	var complete = false;
+	var loader = jQuery("#related-links-list .status");
+	var xhr = null;
+	
+	// initialize
+	resetListContent();
+	loadListContent();
+	
+	// load the posts links list
+	function loadListContent() {
+		if(complete == false) {
+			var data = {
+				action: "load_links_list",
+				post_id: jQuery('#post_ID').val(),
+				nonce: jQuery("#related_links_nonce").val(),
+				search: jQuery("#related-links-searchfield").val(),
+				posts_per_page: numPosts,
+				posts_offset: offsetCounter * numPosts
+			};
+			
+			jQuery("#related-links-list .status").show();
+			xhr = jQuery.post(ajaxurl, data, function(data, textStatus, jqXHR) {
+				if(data) {
+					jQuery("#related-links-list .status").before(data);
+				} else {
+					complete = true;
+					jQuery("#related-links-list .status").addClass('end');
+				}
+				jQuery("#related-links-list .status").hide();
+			});
+			
+			offsetCounter++;
+		}
+	}
+	
+	// reset the list content
+	function resetListContent() {
+		offsetCounter = 0;
+		complete = false;
+		loader.removeClass('end');
+		
+		if(xhr) {
+			xhr.abort();
+			xhr = null;
+		}
+		
+		jQuery("#related-links-list").empty().append(loader);
+	}
+	
+	// load the posts on scroll
+	jQuery("#related-links-content").scroll(function(event) {
+		if($(this).scrollTop() + $(this).height() == $(this)[0].scrollHeight) {
+			loadListContent();
+		}
+	});
+	
+	// search for a title
+	jQuery("#related-links-searchfield").keyup(function() { 
+		resetListContent();
+		loadListContent();
+	});
+	
+	/*
+	// get the search value from the field
+	function getSearchVal() {
+		var field = jQuery("#related-links-searchfield");
+		if(field.val() != field.attr('title')) {
+			return field.val();
+		} else {
+			return '';
+		}
+	}
+	*/
+	
 });

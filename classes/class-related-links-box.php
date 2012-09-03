@@ -7,6 +7,7 @@ class Related_Links_Box
 	 * Class properties
 	 */
 	private $post_type;
+	private $dirname;
 	private $settings;
 	private $offset;
 	
@@ -16,7 +17,7 @@ class Related_Links_Box
 	public function __construct()
 	{		
 		$this->settings = get_option('related_links_settings');
-		$this->offset = 0;
+		$this->dirname = dirname(__FILE__);
 
 		// Set hooks
 		add_action( 'admin_init', array( $this, 'init_hooks' ) );
@@ -74,7 +75,7 @@ class Related_Links_Box
 	 */
 	public function add_styles()
 	{
-		wp_enqueue_style('related-links-styles', WP_PLUGIN_URL . '/related-links/css/style.css');
+		wp_enqueue_style('related-links-styles', plugins_url('/css/style.css', $this->dirname));
 	}
 	
 	/**
@@ -84,7 +85,7 @@ class Related_Links_Box
 	{
 		wp_enqueue_script('jquery-ui-core');
 		wp_enqueue_script('jquery-ui-sortable');
-		wp_enqueue_script('related-links-scripts', WP_PLUGIN_URL . '/related-links/js/script.js', array('jquery'), '1.0');
+		wp_enqueue_script('related-links-scripts', plugins_url('/js/script.js', $this->dirname), array('jquery', 'jquery-ui-core', 'jquery-ui-sortable'));
 	}
 	
 	/**
@@ -172,12 +173,12 @@ class Related_Links_Box
 		{						
 			?>
 			<div id="related-links-search">
-				<input id="related-links-searchfield" type="text" class="regular-text search-textbox related-links-textfield-placeholder" title="<?php _e('Search', 'related_links'); ?>" />
+				<input type="text" id="related-links-searchfield" class="regular-text search-textbox" autocomplete="off" placeholder="<?php _e('Search', 'related_links'); ?>" />
 			</div>
 			<div id="related-links-content">
 				<ul id="related-links-list" class="related-links-list form-no-clear">
-					<li class="loading"><?php _e('Loading list...', 'related_links'); ?></li>
 					<?php // create the links (loaded with ajax) ?>
+					<li class="status"><span class="loading"><img src="<?php echo admin_url( 'images/wpspin_light.gif' ); ?>" alt="" /> <?php _e('Loading…', 'related_links'); ?></span><span class="complete"><?php _e('Complete', 'related_links'); ?></span></li>
 				</ul>
 			</div>
 			<?php
@@ -188,8 +189,8 @@ class Related_Links_Box
 			<div id="related-links-custom">
 				<a href="#" id="related-links-custom-addurl"><?php _e('Add Custom Link', 'related_links'); ?></a>
 				<div id="related-links-custom-content">
-					<p class="button-controls"><label class="howto"><span><?php _e('Label', 'related_links'); ?>:</span><input id="related-links-custom-label" type="text" class="regular-text related-links-textfield-placeholder" title="<?php _e('Link name', 'related_links'); ?>"></label></p>
-					<p class="button-controls"><label class="howto"><span><?php _e('URL', 'related_links'); ?>:</span><input id="related-links-custom-url" type="text" class="regular-text related-links-textfield-placeholder" title="<?php _e('http://', 'related_links'); ?>"></label></p>
+					<p class="button-controls"><label class="howto"><span><?php _e('Label', 'related_links'); ?>:</span><input id="related-links-custom-label" type="text" class="regular-text" placeholder="<?php _e('Link name', 'related_links'); ?>"></label></p>
+					<p class="button-controls"><label class="howto"><span><?php _e('URL', 'related_links'); ?>:</span><input id="related-links-custom-url" type="text" class="regular-text" placeholder="<?php _e('http://', 'related_links'); ?>"></label></p>
 					<p class="button-controls"><input type="button" id="related-links-custom-submit" class="button category-add-sumbit" value="Add Link" tabindex="3"></p>
 				</div>
 			</div>
@@ -201,20 +202,28 @@ class Related_Links_Box
 	 * Load the content of the links list.
 	 * These are all posts of the site.
 	 */
-	public function load_links_list( $posts_per_page = -1 )
+	public function load_links_list( $post_id, $posts_per_page = 40, $posts_offset = 0, $posts_title = '' )
 	{
-		global $wpdb;
-
-		// save offset
+		global $wpdb;		
+		
+		// Set offset
 		if($posts_per_page > 0)
 		{
-			$limit = "LIMIT $this->offset,$posts_per_page";
-			$this->offset = $this->offset + $posts_per_page;
+			$limit = "LIMIT $posts_offset,$posts_per_page";
 		}
 		else
 		{
 			$limit = "";
-			$this->offset = 0;
+		}
+		
+		// Set search
+		if(!empty($posts_title))
+		{
+			$search = "AND post_title LIKE '%{$posts_title}%'";
+		}
+		else
+		{
+			$search = "";
 		} 
 		
 		// Format the query and grab the links
@@ -226,18 +235,16 @@ class Related_Links_Box
 			WHERE post_status
 			IN ('publish', 'future', 'inherit')
 			AND	post_type 
-			IN ($sql_post_types)
+			IN ($sql_post_types) 
+			$search 
 			ORDER BY post_type, post_title ASC 
 			$limit";
-			
+
 		// start the output
 		$query_posts = $wpdb->get_results( $sql );
-	
+		
 		if( !empty( $query_posts ) )
 		{
-			// Get the post id from the ajax call
-			$post_id = intval($_POST['post_id']);
-
 			// Get the meta information to mark the links
 			$meta = get_post_meta($post_id, '_related_links', true);
 
@@ -259,24 +266,20 @@ class Related_Links_Box
 	 */
 	public function load_links_list_callback()
 	{		
-		/*
-			TODO: add nonce checking although it isn't need until now
-		*/
-		
-		// Nonce checking
-		/*
-		if ( !wp_verify_nonce( $_POST['related_links_nonce'], 'related_links_ajax_nonce' ) ) 
+		// Check nonce and data
+		if ( empty( $_POST ) || empty( $_POST['post_id'] ) || empty( $_POST['nonce'] ) || !wp_verify_nonce( $_POST['nonce'], plugin_basename( __FILE__ ) ) ) 
 		{
-			die('<li>Loading error occured</li>');
+			wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 		}
-		*/
 
 		// Check permissions		
-	    if ( current_user_can( 'edit_posts' ) ) 
+	    if ( !current_user_can( 'edit_posts' ) ) 
 	    {
-	        $this->load_links_list();
+			wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	    }
-		
+	
+		$this->load_links_list( $_POST['post_id'], $_POST['posts_per_page'], $_POST['posts_offset'], $_POST['search'] );
+
 		exit;
 	}
 	

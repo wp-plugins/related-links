@@ -10,13 +10,13 @@ Manually link to existing content or a custom url through a meta box on the writ
 
 == Description ==
 
-Related Links gives you the possibility to manually link other posts to your current post. But you can also link pages, media or any custom post-type. And in addition you can use custom urls to link to external files. The plugin adds a metabox to the writing page with a list of all available content.
+Related Links gives you the possibility to manually link other posts to your current post. But you can also link pages, media or any custom post-type. And in addition you can use custom urls to link to external files. The plugin adds a Metabox to the writing page with a list of all available content.
 
-The plugin is very useful if you plan to use a portfolio plugin ie. [Simple Portfolio](http://wordpress.org/extend/plugins/simple-portfolio/ "Manage your portfolio projects easily and use them everywhere you like.") and at the same time maintainig a news section. A  post could then be linked quite easy to a project or any other related content. 
+The plugin is very useful if you plan to use a portfolio plugin ie. [Simple Portfolio](http://wordpress.org/extend/plugins/simple-portfolio/ "Manage your portfolio projects easily and use them everywhere you like.") and at the same time maintaining a news section. A  post could then be linked quite easy to a project or any other related content. 
 
 Features:
 
-* Shows a list of all available content in a metabox on the writing page
+* Shows a list of all available content in a Metabox on the writing page
 * Multiple links can be selected
 * Link order can be changed through drag and drop
 * Custom URLs can be added
@@ -124,6 +124,18 @@ You need to check the `'type'` and then get with `wp_get_attachment_url()` the a
 <?php endforeach; ?>
 </ul>`
 
+= How to prevent a PHP error when the plugin is not activated? =
+
+Put the `get_related_links()` function or your whole code into an `if` clause. Like this your theme will still work even if the plugin is deactivated.
+
+`<?php if(function_exists('get_related_links')) : ?>
+	<?php $related_links = get_related_links(); ?>
+	<ul>
+		<?php foreach ($related_links as $link): ?>
+			<li><a href="<?php echo $link['url']; ?>"><?php echo $link['type']; ?>: <?php echo $link['title']; ?></a></li>
+		<?php endforeach; ?>
+	</ul>
+<?php endif; ?>`
 
 == Screenshots ==
 
@@ -132,6 +144,11 @@ You need to check the `'type'` and then get with `wp_get_attachment_url()` the a
 
 == Changelog ==
 
+= 1.6 =
+* Continuously load list items while scrolling. This means an optimized load and search performance when the blog contains many hundred posts. 
+* Use placeholder attribute for input fields.
+* Use plugins_url() to load stylesheets and javascript.
+* Enqueue jQuery UI correctly.
 = 1.5.7 =
 * Added related_links() function to echo an unordered list of links
 * Added media post-type to link to media files (thanks jhned)
