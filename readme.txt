@@ -145,7 +145,7 @@ Put the `get_related_links()` function or your whole code into an `if` clause. L
 == Changelog ==
 
 = 1.6 =
-* Continuously load list items while scrolling. This means an optimized load and search performance when the blog contains many hundred posts. 
+* Metabox loads new list items while scrolling. Leads to a better load and search performance when a blog contains many hundred posts. 
 * Use placeholder attribute for input fields.
 * Use plugins_url() to load stylesheets and javascript.
 * Enqueue jQuery UI correctly.
