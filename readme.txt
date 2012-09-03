@@ -3,7 +3,7 @@ Contributors: chabis
 Donate link: http://wordpress.org/extend/plugins/related-links/
 Tags: related, deep, internal, link, post, page, selection
 Requires at least: 3.0
-Tested up to: 3.2.1
+Tested up to: 3.4.1
 Stable tag: trunk
 
 Manually link to existing content or a custom url through a meta box on the writing page.
