@@ -12,8 +12,6 @@ Manually link to existing content or a custom url through a meta box on the writ
 
 Related Links gives you the possibility to manually link other posts to your current post. But you can also link pages, media or any custom post-type. And in addition you can use custom urls to link to external files. The plugin adds a Metabox to the writing page with a list of all available content.
 
-The plugin is very useful if you plan to use a portfolio plugin ie. [Simple Portfolio](http://wordpress.org/extend/plugins/simple-portfolio/ "Manage your portfolio projects easily and use them everywhere you like.") and at the same time maintaining a news section. A  post could then be linked quite easy to a project or any other related content. 
-
 Features:
 
 * Shows a list of all available content in a Metabox on the writing page
@@ -21,9 +19,9 @@ Features:
 * Link order can be changed through drag and drop
 * Custom URLs can be added
 * Search field to quickly find a link
+* Simple theme integration with an included widget or `related_links()`
 * Works with custom post-types
-* Settings to enable the post-types that should be shown in the meta box
-* Simple theme integration with `related_links()`
+* Settings to enable the post-types that should be shown in the Metabox
 
 == Installation ==
 
@@ -36,7 +34,12 @@ Features:
 
 = How do I show the links in my theme? =
 
-With the `related_links()` function. This will return an unordered list with an `<ul>` wrapper. Use this code in your template:
+Use the `Related Links` widget to show a list of the related links.
+
+
+= How do I show the links in a specific template? =
+
+Use the `related_links()` function directly in your template files. This will return an unordered list with an `<ul>` wrapper. Use this code for example in your `content.php' template:
 
 `<?php related_links(); ?>`
 
@@ -139,7 +142,7 @@ Put the `get_related_links()` function or your whole code into an `if` clause. L
 
 == Screenshots ==
 
-1. Related links metabox on the post page.
+1. Related links Metabox on the post page.
 3. Settings page.
 
 == Changelog ==
