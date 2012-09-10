@@ -3,9 +3,9 @@ jQuery(document).ready(function($) {
 	// add a link to the list
 	jQuery("#related-links-list a").live("click", function(event) {
 		var id = jQuery(this).attr("href").substr(1);
-		var title = jQuery(this).attr("title");
+		var title = jQuery(this).text();
 		var type = jQuery(this).parent().find("span").text();
-		
+		console.log(id, title, type);
 		jQuery(this).addClass("selected");
 				
 		if (jQuery("#related-links-selected-" + id).length == 0) {
@@ -22,7 +22,7 @@ jQuery(document).ready(function($) {
 		var url = jQuery("#related-links-custom-url").val();
 		var type = "Custom";
 
-		if(url == jQuery("#related-links-custom-url").attr("title")) {
+		if(!url) {
 			url = "";
 			
 			var bColor = jQuery("#related-links-custom-url").css("borderTopColor");
@@ -48,7 +48,7 @@ jQuery(document).ready(function($) {
 			return false;
 		}
 		
-		if(title == jQuery("#related-links-custom-label").attr("title")) {
+		if(!title) {
 			title = url;
 		}
 		
@@ -90,34 +90,7 @@ jQuery(document).ready(function($) {
 	
 	// enable sorting
 	jQuery("#related-links-selected ul").sortable();
-	
-	/*
-	// placeholder text	
-	var name = "related-links-textfield-placeholder";
-	$("." + name).each(function() {
-		var $t = $(this), title = $t.attr("title"), val = $t.val();
-		$t.data( name, title );
-
-		if("" == val ) {
-			$t.val( title );
-		} else if ( title == val ) {
-			return;
-		} else {
-			$t.removeClass( name );
-		}
-	}).focus( function(){
-		var $t = $(this);
-		if( $t.val() == $t.data(name) ) {
-			$t.val("").removeClass( name );
-		}
-	}).blur( function(){
-		var $t = $(this);
-		if("" == $t.val() ) {
-			$t.addClass( name ).val( $t.data(name) );
-		}
-	});
-	*/
-		
+			
 	// list content display
 	var numPosts = 20;
 	var offsetCounter = 0;

@@ -4,7 +4,7 @@
  * Plugin Name: Related Links
  * Plugin URI: http://wordpress.org/extend/plugins/related-links/
  * Description: Allows to easily access links to your other posts and pages through a widget.
- * Version: 1.6
+ * Version: 1.7
  * Author: Triggvy Gunderson
  * Author URI: http://wordpress.org/extend/plugins/related-links/
  * License: GPLv3
@@ -34,15 +34,15 @@
 
 include_once('classes/class-related-links-settings.php');
 include_once('classes/class-related-links-box.php');
+include_once('classes/class-related-links-widget.php');
 
 // initialize objects
 $Related_Links_Settings = new Related_Links_Settings();
 $Related_Links_Box = new Related_Links_Box();
+$Related_Links_Widget = new Related_Links_Widget();
 
-// add or remove default settings
-register_activation_hook(__FILE__, array($Related_Links_Settings, 'add_default_settings'));
-register_deactivation_hook(__FILE__, array($Related_Links_Settings, 'remove_default_settings'));
-
+// add or remove default settings and classes
+register_activation_hook( __FILE__, array( $Related_Links_Settings, 'add_default_settings' ) );
 
 // ------------------------------------------
 // frontend
@@ -119,11 +119,13 @@ if ( !function_exists( 'related_links' ) )
 function related_links()
 {
 	$related_links = get_related_links(); ?>
-	<ul>
-	<?php foreach ($related_links as $link): ?>
+	<?php if ( !empty( $related_links ) ) : ?>
+	<ul class="related-links-list">
+	<?php foreach ( $related_links as $link ): ?>
 		<li><a href="<?php echo $link['url']; ?>"><?php echo $link['title']; ?></a></li>
 	<?php endforeach; ?>
 	</ul>
+	<?php endif; ?>
 	<?php
 }
 }

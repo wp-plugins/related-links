@@ -1,6 +1,7 @@
 <?php
 
-if (!class_exists('Related_Links_Box')) {
+if (!class_exists('Related_Links_Box')) 
+{
 class Related_Links_Box
 {
 	/**
@@ -95,7 +96,7 @@ class Related_Links_Box
 	{
 		global $post_type;
 		
-		add_meta_box( 'related-links-box', __( 'Related Links', 'related_links' ), array( $this, 'create_box_content' ), $post_type, 'side', 'low');
+		add_meta_box( 'related-links-box', __( 'Related Links', 'related-links' ), array( $this, 'create_box_content' ), $post_type, 'side', 'low');
 	}
 	
 	/**
@@ -104,18 +105,34 @@ class Related_Links_Box
 	public function create_box_content()
 	{
 		global $post;
-
-		// stop the output when no type is enabled		
-		if (empty($this->settings['types']))
+		
+		// Check permissions		
+		if ( !current_user_can( 'edit_posts' ) || !current_user_can( 'manage_links' ) ) 
+		{
+			wp_die( __( 'You do not have sufficient permissions to access this content.', 'related-links' ) );
+		}
+		
+		// only output when there is a post
+		if( empty( $post ) ) 
 		{
 			?>
-			<p><?php _e( 'There is no post type enabled in the settings', 'related_links' ); ?>.</p>
+			<p><?php _e( 'This post type doesn\'t support related links.', 'related-links' ); ?>.</p>
+			<?php
+			return;
+		}
+
+		// stop the output when no type is enabled		
+		if ( empty( $this->settings['types'] ) )
+		{
+			?>
+			<p><?php _e( 'There is no post type enabled in the settings.', 'related-links' ); ?>.</p>
 			<?php
 			return;
 		}
 		
 		// Get the meta information	
 		$meta = get_post_meta($post->ID, '_related_links', true);
+		
 		
 		// Use nonce for verification
   		wp_nonce_field(plugin_basename( __FILE__ ), 'related_links_nonce');
@@ -146,7 +163,7 @@ class Related_Links_Box
 				{
 					$custom_meta = $meta['custom'][$id];
 					?>
-					<li class="related-links-selected menu-item-handle" id="related-links-selected-<?php echo $id; ?>"><input type="hidden" name="related_links[posts][]" value="<?php echo $id; ?>" /><input type="hidden" name="related_links[custom][<?php echo $id; ?>][]" value="<?php echo $custom_meta[0]; ?>" /><input type="hidden" name="related_links[custom][<?php echo $id; ?>][]" value="<?php echo $custom_meta[1]; ?>" /><span class="selected-title"><?php echo $custom_meta[0]; ?></span><span class="selected-right"><span class="selected-type"><?php _e('Custom', 'related_links'); ?></span><a href="#" class="selected-delete"><?php _e('Delete', 'related_links'); ?></a></span></li>
+					<li class="related-links-selected menu-item-handle" id="related-links-selected-<?php echo $id; ?>"><input type="hidden" name="related_links[posts][]" value="<?php echo $id; ?>" /><input type="hidden" name="related_links[custom][<?php echo $id; ?>][]" value="<?php echo $custom_meta[0]; ?>" /><input type="hidden" name="related_links[custom][<?php echo $id; ?>][]" value="<?php echo $custom_meta[1]; ?>" /><span class="selected-title"><?php echo $custom_meta[0]; ?></span><span class="selected-right"><span class="selected-type"><?php _e('Custom', 'related-links'); ?></span><a href="#" class="selected-delete"><?php _e('Delete', 'related-links'); ?></a></span></li>
 					<?php
 				}
 				else
@@ -157,7 +174,7 @@ class Related_Links_Box
 					{
 						$meta_post_object = get_post_type_object($meta_post->post_type);
 						?>
-					<li class="related-links-selected menu-item-handle" id="related-links-selected-<?php echo $meta_post->ID; ?>"><input type="hidden" name="related_links[posts][]" value="<?php echo $meta_post->ID; ?>" /><span class="selected-title"><?php echo $meta_post->post_title; ?></span><span class="selected-right"><span class="selected-type"><?php echo $meta_post_object->labels->singular_name; ?></span><a href="#" class="selected-delete"><?php _e('Delete', 'related_links'); ?></a></span></li>
+					<li class="related-links-selected menu-item-handle" id="related-links-selected-<?php echo $meta_post->ID; ?>"><input type="hidden" name="related_links[posts][]" value="<?php echo $meta_post->ID; ?>" /><span class="selected-title"><?php echo $meta_post->post_title; ?></span><span class="selected-right"><span class="selected-type"><?php echo $meta_post_object->labels->singular_name; ?></span><a href="#" class="selected-delete"><?php _e('Delete', 'related-links'); ?></a></span></li>
 						<?php
 					}
 				}
@@ -173,24 +190,24 @@ class Related_Links_Box
 		{						
 			?>
 			<div id="related-links-search">
-				<input type="text" id="related-links-searchfield" class="regular-text search-textbox" autocomplete="off" placeholder="<?php _e('Search', 'related_links'); ?>" />
+				<input type="text" id="related-links-searchfield" class="regular-text search-textbox" autocomplete="off" placeholder="<?php _e('Search', 'related-links'); ?>" />
 			</div>
 			<div id="related-links-content">
 				<ul id="related-links-list" class="related-links-list form-no-clear">
 					<?php // create the links (loaded with ajax) ?>
-					<li class="status"><span class="loading"><img src="<?php echo admin_url( 'images/wpspin_light.gif' ); ?>" alt="" /> <?php _e('Loading…', 'related_links'); ?></span><span class="complete"><?php _e('Complete', 'related_links'); ?></span></li>
+					<li class="status"><span class="loading"><img src="<?php echo admin_url( 'images/wpspin_light.gif' ); ?>" alt="" /> <?php _e('Loading…', 'related-links'); ?></span><span class="complete"><?php _e('Complete', 'related-links'); ?></span></li>
 				</ul>
 			</div>
 			<?php
 		}
 		
-		// add a custom link
+		// add a custom link	
 		?>
 			<div id="related-links-custom">
-				<a href="#" id="related-links-custom-addurl"><?php _e('Add Custom Link', 'related_links'); ?></a>
+				<a href="#" id="related-links-custom-addurl"><?php _e('Add Link', 'related-links'); ?></a>
 				<div id="related-links-custom-content">
-					<p class="button-controls"><label class="howto"><span><?php _e('Label', 'related_links'); ?>:</span><input id="related-links-custom-label" type="text" class="regular-text" placeholder="<?php _e('Link name', 'related_links'); ?>"></label></p>
-					<p class="button-controls"><label class="howto"><span><?php _e('URL', 'related_links'); ?>:</span><input id="related-links-custom-url" type="text" class="regular-text" placeholder="<?php _e('http://', 'related_links'); ?>"></label></p>
+					<p class="button-controls"><label class="howto"><span><?php _e('Label', 'related-links'); ?>:</span><input id="related-links-custom-label" type="text" class="regular-text" placeholder="<?php _e('Link name', 'related-links'); ?>"></label></p>
+					<p class="button-controls"><label class="howto"><span><?php _e('URL', 'related-links'); ?>:</span><input id="related-links-custom-url" type="text" class="regular-text" placeholder="<?php _e('http://', 'related-links'); ?>"></label></p>
 					<p class="button-controls"><input type="button" id="related-links-custom-submit" class="button category-add-sumbit" value="Add Link" tabindex="3"></p>
 				</div>
 			</div>
@@ -219,7 +236,7 @@ class Related_Links_Box
 		// Set search
 		if(!empty($posts_title))
 		{
-			$search = "AND post_title LIKE '%{$posts_title}%'";
+			$search = "AND p.post_title LIKE '%$posts_title%'";
 		}
 		else
 		{
@@ -230,14 +247,14 @@ class Related_Links_Box
 		$sql_post_types = "'" . implode("', '", $this->settings['types']) . "'";
 
 		$sql = "
-			SELECT post_title, ID, post_type, post_mime_type
-			FROM {$wpdb->posts}
-			WHERE post_status
+			SELECT p.post_title, p.ID, p.post_type, p.post_mime_type
+			FROM $wpdb->posts p
+			WHERE p.post_status
 			IN ('publish', 'future', 'inherit')
-			AND	post_type 
+			AND	p.post_type 
 			IN ($sql_post_types) 
 			$search 
-			ORDER BY post_type, post_title ASC 
+			ORDER BY p.post_type, p.post_title ASC 
 			$limit";
 
 		// start the output
@@ -254,11 +271,34 @@ class Related_Links_Box
 				$query_post_object = get_post_type_object($query_post->post_type);
 				?>
 				<li id="related-links-<?php echo $query_post->ID; ?>">
-					<a href="#<?php echo $query_post->ID; ?>" id="in-related-links-<?php echo $query_post->ID; ?>" class="in-related-links<?php if(!empty($meta['posts']) && in_array($query_post->ID, $meta['posts'])) { ?> selected<?php } ?>" title="<?php echo $query_post->post_title; ?>"><?php echo $query_post->post_title; ?></a><span><?php echo $query_post_object->labels->singular_name; ?></span>
+					<a href="#<?php echo $query_post->ID; ?>" id="in-related-links-<?php echo $query_post->ID; ?>" class="in-related-links<?php if(!empty($meta['posts']) && in_array($query_post->ID, $meta['posts'])) { ?> selected<?php } ?>" title="<?php esc_attr( $query_post->post_title ); ?>"><?php echo $query_post->post_title; ?></a><span><?php echo $query_post_object->labels->singular_name; ?></span>
 				</li>
 				<?php
 			}
 		}
+		
+		// add the bookmarks type
+		/*if ( !empty( $this->settings['types']['bookmark'] ) )
+		{
+			$args = array(
+				'hide_invisible' => false
+			);
+			$bookmarks = get_bookmarks( $args );
+			
+			if( !empty( $bookmarks ) )
+			{
+				// add the items
+				foreach( $bookmarks as $bookmark )
+				{
+				//print_r($bookmark);
+					?>
+					<li id="related-links-<?php echo $bookmark->link_id; ?>">
+						<a href="#<?php echo $bookmark->link_id; ?>" id="in-related-links-<?php echo $bookmark->link_id; ?>" class="in-related-links<?php if(!empty($meta['bookmarks']) && in_array($bookmark->link_id, $meta['bookmarks'])) { ?> selected<?php } ?>" title="<?php esc_attr( $bookmark->link_name ); ?>"><?php echo $bookmark->link_name; ?></a><span><?php _e( 'Link', 'related-links' ); ?></span>
+					</li>
+					<?php
+				}
+			}
+		}*/
 	}
 	
 	/**
@@ -271,12 +311,6 @@ class Related_Links_Box
 		{
 			wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 		}
-
-		// Check permissions		
-	    if ( !current_user_can( 'edit_posts' ) ) 
-	    {
-			wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
-	    }
 	
 		$this->load_links_list( $_POST['post_id'], $_POST['posts_per_page'], $_POST['posts_offset'], $_POST['search'] );
 

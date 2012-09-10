@@ -1,6 +1,7 @@
 <?php
 
-if (!class_exists('Related_Links_Settings')) {
+if (!class_exists('Related_Links_Settings')) 
+{
 class Related_Links_Settings
 {	
 	/**
@@ -17,15 +18,25 @@ class Related_Links_Settings
 	 */
 	public function add_default_settings() 
 	{
-		$post_types = $this->get_linkable_post_types();
-		$option = array('types' => array());
-		
-		foreach($post_types as $index => $value)
+		$user_options = get_option('related_links_settings');
+	
+		// add default option if nothing exits
+		if(!$user_options) 
 		{
-			$option['types'][$index] = $value;
+			$post_types = $this->get_linkable_post_types();
+			$option = array('types' => array());
+			
+			// add the post types
+			foreach($post_types as $index => $value)
+			{
+				$option['types'][$index] = $value;
+			}
+			
+			// add the bookmarks type
+			//$option['types']['bookmark'] = 'bookmark';
+			
+			add_option('related_links_settings', $option);
 		}
-		
-		add_option('related_links_settings', $option);
 	}
 	
 	/**
@@ -33,6 +44,7 @@ class Related_Links_Settings
 	 */
 	public function remove_default_settings() 
 	{
+		// delete the user options
 		delete_option('related_links_settings');
 	}
 
@@ -42,14 +54,14 @@ class Related_Links_Settings
 	public function init_page()
 	{
 		register_setting('related_links_settings', 'related_links_settings');
-		add_settings_section('post_types_section', __('Meta-Box options', 'related_links'), array($this, 'create_post_types_section'), __FILE__);
-		add_settings_field('post_types_checkboxes', __('Show this type of content in the list:', 'related_links'), array($this, 'create_post_types_checkboxes'), __FILE__, 'post_types_section');
+		add_settings_section('post_types_section', __('Meta-Box options', 'related-links'), array($this, 'create_post_types_section'), __FILE__);
+		add_settings_field('post_types_checkboxes', __('Show this type of content in the list:', 'related-links'), array($this, 'create_post_types_checkboxes'), __FILE__, 'post_types_section');
 	}
 	
 	public function create_post_types_section() 
 	{
 		?>
-		<p><?php _e( 'The meta-box is visible on every writing page. It shows a list of content to which you can link to.', 'related_links' ); ?></p>
+		<p><?php _e( 'The meta-box is visible on every writing page. It shows a list of content to which you can link to.', 'related-links' ); ?></p>
 		<?php
 	}
 
@@ -67,6 +79,13 @@ class Related_Links_Settings
 			<label><input name="related_links_settings[types][<?php echo $post_type; ?>]" value="<?php echo $post_type; ?>" type="checkbox" <?php if(isset($options['types']) && isset($options['types'][$post_type])) { ?> checked="checked"<?php } ?> /> <?php echo $post_type_object->label; ?></label><br />
 			<?php
 		}
+		
+		// add the bookmarks type 
+		/*
+		?>
+		<label><input name="related_links_settings[types][bookmark]" value="bookmark" type="checkbox" <?php if(isset($options['types']) && isset($options['types']['bookmark'])) { ?> checked="checked"<?php } ?> /> <?php _e( 'Links' ); ?></label><br />
+		<?php
+		*/
 	}
 			
 	/**
@@ -102,7 +121,7 @@ class Related_Links_Settings
 		// Now display the settings editing screen
 		?><div class="wrap">
 			<?php screen_icon('options-general'); ?>
-			<h2><?php _e('Related Links Settings', 'related_links'); ?></h2>
+			<h2><?php _e('Related Links Settings', 'related-links'); ?></h2>
 			<form action="" method="post">
 				<input type="hidden" name="<?php echo $hidden_submit; ?>" value="submit">
 				<?php settings_fields('related_links_settings'); ?>
