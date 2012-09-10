@@ -107,7 +107,7 @@ class Related_Links_Box
 		global $post;
 		
 		// Check permissions		
-		if ( !current_user_can( 'edit_posts' ) || !current_user_can( 'manage_links' ) ) 
+		if ( !current_user_can( 'edit_posts' ) ) 
 		{
 			wp_die( __( 'You do not have sufficient permissions to access this content.', 'related-links' ) );
 		}
