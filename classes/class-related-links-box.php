@@ -109,7 +109,10 @@ class Related_Links_Box
 		// Check permissions		
 		if ( !current_user_can( 'edit_posts' ) ) 
 		{
-			wp_die( __( 'You do not have sufficient permissions to access this content.', 'related-links' ) );
+			?>
+			<p><?php _e( 'You do not have sufficient permissions to access this content.', 'related-links' ); ?>.</p>
+			<?php
+			return;
 		}
 		
 		// only output when there is a post
@@ -308,6 +311,12 @@ class Related_Links_Box
 	{		
 		// Check nonce and data
 		if ( empty( $_POST ) || empty( $_POST['post_id'] ) || empty( $_POST['nonce'] ) || !wp_verify_nonce( $_POST['nonce'], plugin_basename( __FILE__ ) ) ) 
+		{
+			wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+		}
+		
+		// Check permissions		
+		if ( !current_user_can( 'edit_posts' ) ) 
 		{
 			wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 		}
