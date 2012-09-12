@@ -147,6 +147,8 @@ Put the `get_related_links()` function or your whole code into an `if` clause. L
 
 == Changelog ==
 
+= 1.7.1 =
+* Removed an obsolete console log that may cause problems on Internet Explorer 7 and 8.
 = 1.7 =
 * Added a Widget to show the related links in your widgetized theme areas.
 * Fixed a JavaScript error when adding custom links.
