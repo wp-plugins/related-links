@@ -5,7 +5,7 @@ jQuery(document).ready(function($) {
 		var id = jQuery(this).attr("href").substr(1);
 		var title = jQuery(this).text();
 		var type = jQuery(this).parent().find("span").text();
-		console.log(id, title, type);
+
 		jQuery(this).addClass("selected");
 				
 		if (jQuery("#related-links-selected-" + id).length == 0) {
